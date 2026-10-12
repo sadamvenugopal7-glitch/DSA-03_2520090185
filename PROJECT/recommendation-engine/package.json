@@ -1,0 +1,9 @@
+{
+  "name": "recommendation-engine",
+  "version": "1.0.0",
+  "description": "DSA Movie Recommendation Web Application - Java Spring Boot & MongoDB",
+  "scripts": {
+    "start": "cd backend && mvn spring-boot:run",
+    "build": "cd backend && mvn clean package -DskipTests"
+  }
+}

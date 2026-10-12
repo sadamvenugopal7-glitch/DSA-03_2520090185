@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details | CineMatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+      <span>CineMatch</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="movies.html" class="nav-link">Explore Movies</a></li>
+      <li><a href="recommendations.html" class="nav-link">Recommendations</a></li>
+      <li><a href="profile.html" class="nav-link">Profile</a></li>
+    </ul>
+
+    <div class="nav-auth" id="navbar-auth-section">
+      <!-- Dynamic via api.js -->
+    </div>
+  </nav>
+
+  <main class="container" style="max-width: 900px; padding-top: 3rem;">
+    <div style="margin-bottom: 1.5rem;">
+      <a href="movies.html" class="btn btn-secondary btn-sm">&larr; Back to Movies</a>
+    </div>
+
+    <div id="movie-details-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2.5rem; backdrop-filter: blur(12px);">
+      <div style="display: flex; gap: 2.5rem; flex-wrap: wrap;">
+        <img id="detail-poster" src="" alt="Poster" style="width: 240px; border-radius: var(--radius-md); aspect-ratio: 2 / 3; object-fit: cover; box-shadow: var(--shadow-md);" />
+        
+        <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column;">
+          <h1 id="detail-title" style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem;">Movie Title</h1>
+          
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; font-size: 0.95rem; color: var(--text-muted);">
+            <span id="detail-year">2024</span>
+            <span>•</span>
+            <span id="detail-rating" style="color: #fbbf24; font-weight: 700;">★ 8.5/10</span>
+          </div>
+
+          <div id="detail-genres" class="genre-tags" style="margin-bottom: 1.25rem;"></div>
+
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; color: #cbd5e1;">Synopsis</h3>
+          <p id="detail-description" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 2rem;">
+            Loading synopsis...
+          </p>
+
+          <div style="display: flex; gap: 1rem; align-items: center; margin-top: auto; flex-wrap: wrap;">
+            <button id="detail-fav-btn" class="btn btn-secondary">
+              ♡ Add to Favorites
+            </button>
+            <a href="recommendations.html" class="btn btn-outline">
+              Check Recommendations &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Rating Section -->
+      <div class="star-rating-box" style="margin-top: 2.5rem;">
+        <h4>Rate this movie to calibrate your personalized recommendations:</h4>
+        <div class="stars-container" id="star-rater">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <div id="rating-display-text" style="font-size: 0.9rem; color: #fbbf24; margin-top: 0.4rem; font-weight: 600;">5 Stars</div>
+        <div style="margin-top: 1rem;">
+          <button id="submit-detail-rating-btn" class="btn btn-primary btn-sm">Submit Rating</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p style="color: var(--text-muted); font-size: 0.85rem;">
+        CineMatch • Full-Stack DSA Project
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    let currentMovieId = null;
+    let currentRatingValue = 5;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      currentMovieId = params.get('id');
+
+      if (!currentMovieId) {
+        window.location.href = 'movies.html';
+        return;
+      }
+
+      await loadMovieDetails(currentMovieId);
+      initDetailRating();
+    });
+
+    async function loadMovieDetails(id) {
+      const res = await apiRequest(`/movies/${id}`);
+      if (!res.success || !res.movie) {
+        showToast('Movie not found', 'error');
+        return;
+      }
+
+      const movie = res.movie;
+      document.getElementById('detail-title').innerText = movie.title;
+      document.getElementById('detail-year').innerText = movie.releaseYear;
+      document.getElementById('detail-rating').innerText = `★ ${movie.rating}/10 Global`;
+      document.getElementById('detail-description').innerText = movie.description;
+      document.getElementById('detail-poster').src = movie.imageUrl || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80';
+
+      const genresContainer = document.getElementById('detail-genres');
+      genresContainer.innerHTML = (movie.genres || []).map(g => `<span class="badge-tag">${g}</span>`).join('');
+
+      // Check favorite status
+      const user = getCurrentUser();
+      const favBtn = document.getElementById('detail-fav-btn');
+      if (user && favBtn) {
+        const favRes = await apiRequest(`/favorites/user/${user._id || user.id}`);
+        if (favRes.success && Array.isArray(favRes.favorites)) {
+          const isFav = favRes.favorites.some(f => (f.movieId === id || f.movieId?._id === id));
+          updateFavButton(favBtn, isFav);
+        }
+
+        favBtn.addEventListener('click', async () => {
+          const isCurrentlyFav = favBtn.classList.contains('btn-accent');
+          if (isCurrentlyFav) {
+            await apiRequest(`/favorites/${id}`, 'DELETE', { userId: user._id || user.id });
+            updateFavButton(favBtn, false);
+            showToast('Removed from favorites', 'info');
+          } else {
+            await apiRequest('/favorites', 'POST', { userId: user._id || user.id, movieId: id });
+            updateFavButton(favBtn, true);
+            showToast('Added to favorites!', 'success');
+          }
+        });
+      }
+    }
+
+    function updateFavButton(btn, isFav) {
+      btn.innerHTML = isFav ? '♥ Favorited' : '♡ Add to Favorites';
+      btn.className = isFav ? 'btn btn-accent' : 'btn btn-secondary';
+    }
+
+    function initDetailRating() {
+      const stars = document.querySelectorAll('#star-rater .star');
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          currentRatingValue = parseInt(star.dataset.value, 10);
+          stars.forEach(s => {
+            const val = parseInt(s.dataset.value, 10);
+            s.classList.toggle('selected', val <= currentRatingValue);
+          });
+          document.getElementById('rating-display-text').innerText = `${currentRatingValue} Star${currentRatingValue > 1 ? 's' : ''}`;
+        });
+      });
+
+      // Submit Rating
+      document.getElementById('submit-detail-rating-btn').addEventListener('click', async () => {
+        const user = getCurrentUser();
+        if (!user) {
+          showToast('Please login to submit ratings.', 'info');
+          return;
+        }
+
+        const res = await apiRequest('/ratings', 'POST', {
+          userId: user._id || user.id,
+          movieId: currentMovieId,
+          rating: currentRatingValue
+        });
+
+        if (res.success) {
+          showToast(`Successfully rated ${currentRatingValue} ★!`, 'success');
+        } else {
+          showToast(res.message || 'Error submitting rating.', 'error');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | CineMatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+      <span>CineMatch</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+      <li><a href="movies.html" class="nav-link">Explore Movies</a></li>
+      <li><a href="recommendations.html" class="nav-link">Recommendations</a></li>
+      <li><a href="profile.html" class="nav-link">Profile</a></li>
+    </ul>
+
+    <div class="nav-auth" id="navbar-auth-section">
+      <!-- Dynamic via api.js -->
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Welcome Banner with User Preferences -->
+    <div class="welcome-banner">
+      <div class="welcome-content">
+        <h1>Welcome, <span id="dash-user-name">User</span> 👋</h1>
+        <div style="font-size: 0.95rem; color: var(--text-muted);">
+          Your Preferences:
+        </div>
+        <div class="welcome-prefs" id="dash-user-genres">
+          <span class="badge-tag">Loading genres...</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="recommendations.html" class="btn btn-primary">
+          View All Ranked Recommendations
+        </a>
+        <a href="movies.html" class="btn btn-secondary">
+          Explore Movies
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+      <div class="feature-card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;">Algorithm Mode</div>
+        <div style="font-size: 1.3rem; font-weight: 800; color: #818cf8; margin-top: 0.25rem;">Max-Heap Priority Queue</div>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;">My Ratings</div>
+        <div id="stat-ratings-count" style="font-size: 1.3rem; font-weight: 800; color: #fbbf24; margin-top: 0.25rem;">0</div>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;">Saved Favorites</div>
+        <div id="stat-favorites-count" style="font-size: 1.3rem; font-weight: 800; color: #ec4899; margin-top: 0.25rem;">0</div>
+      </div>
+      <div class="feature-card" style="padding: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase;">Catalog Size</div>
+        <div id="stat-catalog-count" style="font-size: 1.3rem; font-weight: 800; color: #10b981; margin-top: 0.25rem;">28 Movies</div>
+      </div>
+    </div>
+
+    <!-- Recommended For You Section -->
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Recommended For You</h2>
+        <p class="section-subtitle">Top movie matches computed based on your favorite genres & rating affinity</p>
+      </div>
+      <a href="recommendations.html" class="btn btn-secondary btn-sm">Full Ranking & DSA Breakdown &rarr;</a>
+    </div>
+
+    <div id="dashboard-rec-grid" class="movie-grid">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">
+        Calculating personalized recommendations...
+      </div>
+    </div>
+  </main>
+
+  <!-- Movie Details Modal -->
+  <div class="modal-overlay" id="movie-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+      <div class="modal-body">
+        <div class="modal-movie-top">
+          <img id="modal-poster" src="" alt="Poster" class="modal-poster" />
+          <div class="modal-meta-content">
+            <h2 id="modal-title" class="modal-title">Movie Title</h2>
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--text-muted);">
+              <span id="modal-year">2024</span>
+              <span id="modal-rating" style="color: #fbbf24; font-weight: 600;">★ 8.5/10</span>
+            </div>
+            <div id="modal-genres" class="genre-tags"></div>
+            <p id="modal-description" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-top: 0.75rem;"></p>
+          </div>
+        </div>
+
+        <div class="star-rating-box">
+          <h4>Rate this movie</h4>
+          <div class="stars-container" id="star-rater">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <div id="rating-display-text" style="font-size: 0.85rem; color: #fbbf24; margin-top: 0.4rem; font-weight: 600;">5 Stars</div>
+          <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.75rem;">
+            <button id="submit-rating-btn" class="btn btn-primary btn-sm">Submit Rating</button>
+            <button id="modal-fav-btn" class="btn btn-secondary btn-sm">♡ Add to Favorites</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p style="color: var(--text-muted); font-size: 0.85rem;">
+        CineMatch • Full-Stack DSA Project
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/movies.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = requireAuth();
+      if (!user) return;
+
+      document.getElementById('dash-user-name').innerText = user.name || 'User';
+
+      // Render Preferences
+      const prefsContainer = document.getElementById('dash-user-genres');
+      if (user.preferredGenres && user.preferredGenres.length > 0) {
+        prefsContainer.innerHTML = user.preferredGenres.map(g => `<span class="badge-tag">${g}</span>`).join('');
+      } else {
+        prefsContainer.innerHTML = `<span style="color: var(--text-dim); font-size: 0.85rem;">No preferences set. <a href="profile.html" style="color: var(--primary);">Choose genres</a></span>`;
+      }
+
+      // Load User Stats
+      const [ratingsRes, favsRes] = await Promise.all([
+        apiRequest(`/ratings/user/${user._id}`),
+        apiRequest(`/favorites/user/${user._id}`)
+      ]);
+
+      if (ratingsRes.success) document.getElementById('stat-ratings-count').innerText = ratingsRes.count || 0;
+      if (favsRes.success) document.getElementById('stat-favorites-count').innerText = favsRes.count || 0;
+
+      // Load Top Recommendations for dashboard
+      const recContainer = document.getElementById('dashboard-rec-grid');
+      const recRes = await apiRequest(`/recommendations/${user._id}?limit=8`);
+
+      if (recRes.success && Array.isArray(recRes.recommendations) && recRes.recommendations.length > 0) {
+        recContainer.innerHTML = recRes.recommendations.map(item => {
+          const movie = item.movie;
+          const score = item.recommendationScore;
+          const isFavorited = userFavoritesSet.has(movie._id);
+          const genresHtml = (movie.genres || []).map(g => `<span class="genre-tag">${g}</span>`).join('');
+          const safePoster = movie.imageUrl || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80';
+
+          return `
+            <div class="movie-card" data-movie-id="${movie._id}">
+              <div class="poster-wrapper">
+                <img src="${safePoster}" alt="${movie.title}" class="poster-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80'" />
+                <div class="score-badge">
+                  Score: ${score}
+                </div>
+                <div class="rating-badge">
+                  ★ ${(movie.rating || 0).toFixed(1)}
+                </div>
+                <button class="card-fav-btn ${isFavorited ? 'favorited' : ''}" 
+                        onclick="toggleFavorite(event, '${movie._id}')" 
+                        title="${isFavorited ? 'Remove Favorite' : 'Add to Favorites'}">
+                  ♥
+                </button>
+              </div>
+              <div class="movie-info">
+                <h3 class="movie-title" title="${movie.title}">${movie.title}</h3>
+                <div class="movie-meta">
+                  <span>📅 ${movie.releaseYear}</span>
+                  <span style="color: #ec4899; font-weight: 700;">Match: ${score}/10</span>
+                </div>
+                <div class="genre-tags">
+                  ${genresHtml}
+                </div>
+                <div class="card-actions">
+                  <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="openMovieDetailsModal('${movie._id}')">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        recContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--bg-card); border-radius: var(--radius-md);">
+            <p>No recommendations yet. Start by rating a few movies or setting preferred genres!</p>
+            <a href="movies.html" class="btn btn-primary btn-sm" style="margin-top: 1rem;">Explore Movies</a>
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

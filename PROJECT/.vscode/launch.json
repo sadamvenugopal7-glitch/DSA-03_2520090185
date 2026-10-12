@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    
+
+    
+    {
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}"
+    },
+
+    {
+      "type": "java",
+      "name": "Run CineMatch Backend (Spring Boot)",
+      "request": "launch",
+      "mainClass": "com.recommendationengine.RecommendationEngineApplication",
+      "projectName": "recommendation-engine-backend",
+      "cwd": "${workspaceFolder}/recommendation-engine/backend",
+      "env": {
+        "PORT": "8080",
+        "MONGODB_URI": "mongodb://127.0.0.1:27017/recommendation_engine"
+      }
+    }
+  ]
+}

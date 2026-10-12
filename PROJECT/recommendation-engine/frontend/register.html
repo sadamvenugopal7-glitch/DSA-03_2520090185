@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | CineMatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+      <span>CineMatch</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="movies.html" class="nav-link">Explore Movies</a></li>
+    </ul>
+
+    <div class="nav-auth" id="navbar-auth-section">
+      <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+    </div>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card" style="max-width: 540px;">
+      <div class="auth-header">
+        <h1>Create Account</h1>
+        <p>Set up your profile and choose your favorite genres</p>
+      </div>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name</label>
+          <input type="text" id="name" class="form-control" placeholder="John Doe" required autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="john@example.com" required autocomplete="email" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Min. 6 characters" required autocomplete="new-password" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 0.5rem;">
+          <label class="form-label">Select Favorite Genres:</label>
+          <div class="genre-grid">
+            <label>
+              <input type="checkbox" name="genres" value="Action" class="genre-checkbox">
+              <span class="genre-chip">Action</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Comedy" class="genre-checkbox">
+              <span class="genre-chip">Comedy</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Drama" class="genre-checkbox">
+              <span class="genre-chip">Drama</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Sci-Fi" class="genre-checkbox">
+              <span class="genre-chip">Sci-Fi</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Thriller" class="genre-checkbox">
+              <span class="genre-chip">Thriller</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Romance" class="genre-checkbox">
+              <span class="genre-chip">Romance</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Animation" class="genre-checkbox">
+              <span class="genre-chip">Animation</span>
+            </label>
+            <label>
+              <input type="checkbox" name="genres" value="Adventure" class="genre-checkbox">
+              <span class="genre-chip">Adventure</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" id="register-submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
+          Create Account
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        Already have an account? 
+        <a href="login.html" style="color: var(--primary); font-weight: 600; text-decoration: underline;">
+          Login here
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

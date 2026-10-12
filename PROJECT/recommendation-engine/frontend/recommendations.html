@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalized Recommendations | CineMatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+      <span>CineMatch</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="movies.html" class="nav-link">Explore Movies</a></li>
+      <li><a href="recommendations.html" class="nav-link active">Recommendations</a></li>
+      <li><a href="profile.html" class="nav-link">Profile</a></li>
+    </ul>
+
+    <div class="nav-auth" id="navbar-auth-section">
+      <!-- Dynamic via api.js -->
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">YOUR PERSONALIZED RECOMMENDATIONS</h1>
+        <p class="section-subtitle">Based on your preferences, previous ratings, and intelligent ranking</p>
+      </div>
+      <div>
+        <button class="btn btn-secondary btn-sm" onclick="window.location.reload()">
+          🔄 Re-run CineMatch Engine
+        </button>
+      </div>
+    </div>
+
+    <!-- DSA Live Metrics Bar -->
+    <div id="dsa-stats-container">
+      <!-- Populated via recommendations.js -->
+    </div>
+
+    <!-- Ranked Recommendations List -->
+    <div id="recommendations-container" class="recommendations-list">
+      <!-- Populated via recommendations.js -->
+    </div>
+  </main>
+
+  <!-- Movie Details Modal -->
+  <div class="modal-overlay" id="movie-modal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+      <div class="modal-body">
+        <div class="modal-movie-top">
+          <img id="modal-poster" src="" alt="Poster" class="modal-poster" />
+          <div class="modal-meta-content">
+            <h2 id="modal-title" class="modal-title">Movie Title</h2>
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--text-muted);">
+              <span id="modal-year">2024</span>
+              <span id="modal-rating" style="color: #fbbf24; font-weight: 600;">★ 8.5/10</span>
+            </div>
+            <div id="modal-genres" class="genre-tags"></div>
+            <p id="modal-description" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-top: 0.75rem;"></p>
+          </div>
+        </div>
+
+        <div class="star-rating-box">
+          <h4>Rate this movie:</h4>
+          <div class="stars-container" id="star-rater">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <div id="rating-display-text" style="font-size: 0.85rem; color: #fbbf24; margin-top: 0.4rem; font-weight: 600;">5 Stars</div>
+          <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.75rem;">
+            <button id="submit-rating-btn" class="btn btn-primary btn-sm">Submit Rating</button>
+            <button id="modal-fav-btn" class="btn btn-secondary btn-sm">♡ Add to Favorites</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p style="color: var(--text-muted); font-size: 0.85rem;">
+        CineMatch • Full-Stack DSA Project
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/movies.js"></script>
+  <script src="js/recommendations.js"></script>
+</body>
+</html>
